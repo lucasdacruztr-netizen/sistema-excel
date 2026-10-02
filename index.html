@@ -1,593 +1,789 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Excel</title>
-</head>
-<body>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Organização de Alunos</title>
 
-    <h1>Sistema de Excel</h1>
-<!DOCTYPE html>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-```
-<title>Sistema de Organização de Alunos</title>
-
-<!-- Biblioteca para ler arquivos Excel -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
-<style>
+  <style>
     * {
-        box-sizing: border-box;
+      box-sizing: border-box;
     }
 
     body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f3f4f6;
-        color: #222;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      color: #222;
     }
 
     header {
-        background: #1f2937;
-        color: white;
-        padding: 25px;
-        text-align: center;
+      background: #1f2937;
+      color: white;
+      padding: 25px;
+      text-align: center;
     }
 
     header h1 {
-        margin: 0 0 8px;
-    }
-
-    header p {
-        margin: 0;
+      margin: 0 0 8px;
     }
 
     .container {
-        max-width: 1200px;
-        margin: 30px auto;
-        padding: 0 20px;
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
     }
 
     .card {
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     }
 
     .upload-area {
-        border: 2px dashed #9ca3af;
-        border-radius: 10px;
-        padding: 30px;
-        text-align: center;
+      border: 2px dashed #9ca3af;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
     }
 
     input[type="file"] {
-        margin-top: 15px;
-        padding: 10px;
+      margin-top: 15px;
+      padding: 10px;
+    }
+
+    button {
+      margin: 15px 10px 0 0;
+      padding: 12px 20px;
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #botaoExcel {
+      background: #2563eb;
+      color: white;
+    }
+
+    #botaoGrafico {
+      background: #16a34a;
+      color: white;
     }
 
     .resumo {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-        margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 20px;
     }
 
     .indicador {
-        background: #f9fafb;
-        border-radius: 10px;
-        padding: 20px;
-        text-align: center;
-        border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid #e5e7eb;
     }
 
     .indicador h2 {
-        margin: 0;
-        font-size: 28px;
-    }
-
-    .indicador p {
-        margin-bottom: 0;
+      margin: 0;
+      font-size: 28px;
     }
 
     .tabela-container {
-        overflow-x: auto;
-        margin-top: 20px;
+      overflow-x: auto;
+      margin-top: 20px;
     }
 
     table {
-        width: 100%;
-        border-collapse: collapse;
+      width: 100%;
+      border-collapse: collapse;
     }
 
     th,
     td {
-        border-bottom: 1px solid #ddd;
-        padding: 12px;
-        text-align: left;
+      border-bottom: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
     }
 
     th {
-        background: #f3f4f6;
-    }
-
-    .aprovado {
-        font-weight: bold;
-    }
-
-    .reprovado {
-        font-weight: bold;
+      background: #f3f4f6;
     }
 
     .mensagem {
-        padding: 15px;
-        margin-top: 15px;
-        border-radius: 8px;
-        background: #f3f4f6;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 8px;
+      background: #f3f4f6;
+    }
+
+    .grafico {
+      margin-top: 25px;
+      text-align: center;
+    }
+
+    canvas {
+      max-width: 100%;
+      height: auto;
     }
 
     @media (max-width: 700px) {
-        .resumo {
-            grid-template-columns: 1fr;
-        }
+      .resumo {
+        grid-template-columns: 1fr;
+      }
     }
-</style>
-```
-
+  </style>
 </head>
 
 <body>
 
-<header>
+  <header>
     <h1>Sistema de Organização de Alunos</h1>
-    <p>Importe uma planilha Excel para calcular as médias automaticamente</p>
-</header>
+    <p>Importe uma planilha Excel para calcular as médias</p>
+  </header>
 
-<div class="container">
+  <div class="container">
 
-```
-<div class="card">
+    <div class="card">
+      <h2>1. Importar Excel</h2>
 
-    <h2>1. Importar Excel</h2>
-
-    <div class="upload-area">
-
-        <p>
-            Selecione uma planilha Excel (.xlsx ou .xls)
-        </p>
+      <div class="upload-area">
+        <p>Selecione uma planilha Excel (.xlsx ou .xls)</p>
 
         <input
-            type="file"
-            id="arquivoExcel"
-            accept=".xlsx,.xls"
+          type="file"
+          id="arquivoExcel"
+          accept=".xlsx,.xls"
         >
+      </div>
 
-    </div>
-
-    <div id="mensagem" class="mensagem">
+      <div id="mensagem" class="mensagem">
         Nenhum arquivo selecionado.
+      </div>
     </div>
 
-</div>
 
+    <div class="card">
 
-<div class="card">
+      <h2>2. Resumo dos alunos</h2>
 
-    <h2>2. Resumo</h2>
-
-    <div class="resumo">
+      <div class="resumo">
 
         <div class="indicador">
-            <h2 id="totalAlunos">0</h2>
-            <p>Total de alunos</p>
+          <h2 id="totalAlunos">0</h2>
+          <p>Total de alunos</p>
         </div>
 
         <div class="indicador">
-            <h2 id="totalAprovados">0</h2>
-            <p>Aprovados</p>
+          <h2 id="totalAprovados">0</h2>
+          <p>Aprovados</p>
         </div>
 
         <div class="indicador">
-            <h2 id="totalReprovados">0</h2>
-            <p>Reprovados</p>
+          <h2 id="totalReprovados">0</h2>
+          <p>Reprovados</p>
         </div>
+
+      </div>
+
+
+      <div class="resumo">
+
+        <div class="indicador">
+          <h2 id="porcentagemAprovados">0%</h2>
+          <p>% de aprovados</p>
+        </div>
+
+        <div class="indicador">
+          <h2 id="porcentagemReprovados">0%</h2>
+          <p>% de reprovados</p>
+        </div>
+
+        <div class="indicador">
+          <h2 id="mediaGeral">0,00</h2>
+          <p>Média geral</p>
+        </div>
+
+      </div>
+
+
+      <button
+        id="botaoExcel"
+        onclick="gerarExcel()"
+        disabled
+      >
+        📥 Gerar novo Excel com médias
+      </button>
+
+      <button
+        id="botaoGrafico"
+        onclick="mostrarGrafico()"
+        disabled
+      >
+        📊 Mostrar gráfico
+      </button>
 
     </div>
 
-    <div class="resumo">
 
-        <div class="indicador">
-            <h2 id="porcentagemAprovados">0%</h2>
-            <p>% de aprovados</p>
-        </div>
+    <div class="card">
 
-        <div class="indicador">
-            <h2 id="porcentagemReprovados">0%</h2>
-            <p>% de reprovados</p>
-        </div>
+      <h2>3. Resultado dos alunos</h2>
 
-        <div class="indicador">
-            <h2 id="mediaGeral">0,00</h2>
-            <p>Média geral</p>
-        </div>
-
-    </div>
-
-</div>
-
-
-<div class="card">
-
-    <h2>3. Resultado dos alunos</h2>
-
-    <div class="tabela-container">
+      <div class="tabela-container">
 
         <table id="tabelaAlunos">
 
-            <thead>
-                <tr>
-                    <th>Nº</th>
-                    <th>Aluno</th>
-                    <th>Nota 1</th>
-                    <th>Nota 2</th>
-                    <th>Nota 3</th>
-                    <th>Média</th>
-                    <th>Situação</th>
-                </tr>
-            </thead>
+          <thead>
 
-            <tbody>
-                <tr>
-                    <td colspan="7">
-                        Importe um Excel para visualizar os alunos.
-                    </td>
-                </tr>
-            </tbody>
+            <tr>
+              <th>Nº</th>
+              <th>Aluno</th>
+              <th>Nota 1</th>
+              <th>Nota 2</th>
+              <th>Nota 3</th>
+              <th>Média</th>
+              <th>Situação</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td colspan="7">
+                Importe um Excel para visualizar os alunos.
+              </td>
+            </tr>
+
+          </tbody>
 
         </table>
 
+      </div>
+
     </div>
 
-</div>
-```
 
-</div>
+    <div class="card grafico">
 
-<script>
+      <h2>4. Gráfico</h2>
 
-    const arquivoExcel = document.getElementById("arquivoExcel");
+      <canvas
+        id="graficoAlunos"
+        width="700"
+        height="400"
+      ></canvas>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    let alunosProcessados = [];
+    let nomeArquivoOriginal = "";
+
+    const arquivoExcel =
+      document.getElementById("arquivoExcel");
+
 
     arquivoExcel.addEventListener("change", function(event) {
 
-        const arquivo = event.target.files[0];
+      const arquivo = event.target.files[0];
 
-        if (!arquivo) {
-            return;
+      if (!arquivo) {
+        return;
+      }
+
+      nomeArquivoOriginal = arquivo.name;
+
+      document.getElementById("mensagem").textContent =
+        "Lendo o arquivo: " + arquivo.name;
+
+
+      const leitor = new FileReader();
+
+
+      leitor.onload = function(e) {
+
+        try {
+
+          const dados =
+            new Uint8Array(e.target.result);
+
+          const workbook =
+            XLSX.read(dados, {
+              type: "array"
+            });
+
+
+          const nomePlanilha =
+            workbook.SheetNames[0];
+
+
+          const planilha =
+            workbook.Sheets[nomePlanilha];
+
+
+          const dadosExcel =
+            XLSX.utils.sheet_to_json(
+              planilha,
+              {
+                header: 1
+              }
+            );
+
+
+          processarAlunos(dadosExcel);
+
+        } catch (erro) {
+
+          document.getElementById("mensagem").textContent =
+            "Erro ao ler o arquivo Excel.";
+
+          console.error(erro);
         }
 
-        document.getElementById("mensagem").textContent =
-            "Lendo o arquivo: " + arquivo.name;
+      };
 
-        const leitor = new FileReader();
 
-        leitor.onload = function(e) {
-
-            try {
-
-                const dados = new Uint8Array(e.target.result);
-
-                const workbook = XLSX.read(dados, {
-                    type: "array"
-                });
-
-                const nomePlanilha = workbook.SheetNames[0];
-
-                const planilha = workbook.Sheets[nomePlanilha];
-
-                const dadosExcel = XLSX.utils.sheet_to_json(planilha, {
-                    header: 1
-                });
-
-                processarAlunos(dadosExcel);
-
-            } catch (erro) {
-
-                document.getElementById("mensagem").textContent =
-                    "Erro ao ler o arquivo Excel.";
-
-                console.error(erro);
-
-            }
-
-        };
-
-        leitor.readAsArrayBuffer(arquivo);
+      leitor.readAsArrayBuffer(arquivo);
 
     });
 
 
     function processarAlunos(dados) {
 
-        if (dados.length < 2) {
+      if (dados.length < 2) {
 
-            document.getElementById("mensagem").textContent =
-                "A planilha não possui dados suficientes.";
+        document.getElementById("mensagem").textContent =
+          "A planilha não possui dados suficientes.";
 
-            return;
+        return;
+      }
 
-        }
 
-
-        const tabela = document.querySelector("#tabelaAlunos tbody");
-
-        tabela.innerHTML = "";
-
-
-        let totalAlunos = 0;
-
-        let aprovados = 0;
-
-        let reprovados = 0;
-
-        let somaMedias = 0;
-
-
-        /*
-            Esperamos uma planilha parecida com:
-
-            Nº | Aluno | Nota 1 | Nota 2 | Nota 3
-
-            Exemplo:
-
-            1 | João | 7 | 8 | 6
-            2 | Maria | 5 | 6 | 7
-        */
-
-
-        for (let i = 1; i < dados.length; i++) {
-
-            const linha = dados[i];
-
-            if (!linha || linha.length === 0) {
-                continue;
-            }
-
-
-            const numero = linha[0] ?? "";
-
-            const nome = linha[1] ?? "";
-
-            const nota1 = converterNota(linha[2]);
-
-            const nota2 = converterNota(linha[3]);
-
-            const nota3 = converterNota(linha[4]);
-
-
-            if (
-                nome === "" &&
-                nota1 === null &&
-                nota2 === null &&
-                nota3 === null
-            ) {
-                continue;
-            }
-
-
-            const notas = [];
-
-            if (nota1 !== null) notas.push(nota1);
-
-            if (nota2 !== null) notas.push(nota2);
-
-            if (nota3 !== null) notas.push(nota3);
-
-
-            let media = 0;
-
-            if (notas.length > 0) {
-
-                const soma = notas.reduce(
-                    (total, nota) => total + nota,
-                    0
-                );
-
-                media = soma / notas.length;
-
-            }
-
-
-            const situacao =
-                media >= 5
-                    ? "Aprovado"
-                    : "Reprovado";
-
-
-            if (situacao === "Aprovado") {
-
-                aprovados++;
-
-            } else {
-
-                reprovados++;
-
-            }
-
-
-            totalAlunos++;
-
-            somaMedias += media;
-
-
-            const linhaTabela =
-                document.createElement("tr");
-
-
-            linhaTabela.innerHTML = `
-
-                <td>${numero}</td>
-
-                <td>${nome}</td>
-
-                <td>${formatarNota(nota1)}</td>
-
-                <td>${formatarNota(nota2)}</td>
-
-                <td>${formatarNota(nota3)}</td>
-
-                <td>${media.toFixed(2).replace(".", ",")}</td>
-
-                <td class="${situacao === "Aprovado" ? "aprovado" : "reprovado"}">
-                    ${situacao}
-                </td>
-
-            `;
-
-
-            tabela.appendChild(linhaTabela);
-
-        }
-
-
-        atualizarResumo(
-            totalAlunos,
-            aprovados,
-            reprovados,
-            somaMedias
+      const tabela =
+        document.querySelector(
+          "#tabelaAlunos tbody"
         );
 
 
-        document.getElementById("mensagem").textContent =
-            "Arquivo processado com sucesso.";
+      tabela.innerHTML = "";
+
+      alunosProcessados = [];
+
+
+      let aprovados = 0;
+      let reprovados = 0;
+      let somaMedias = 0;
+
+
+      for (let i = 1; i < dados.length; i++) {
+
+        const linha = dados[i];
+
+        if (!linha || linha.length === 0) {
+          continue;
+        }
+
+
+        const numero =
+          linha[0] ?? "";
+
+        const nome =
+          linha[1] ?? "";
+
+
+        const nota1 =
+          converterNota(linha[2]);
+
+        const nota2 =
+          converterNota(linha[3]);
+
+        const nota3 =
+          converterNota(linha[4]);
+
+
+        if (
+          nome === "" &&
+          nota1 === null &&
+          nota2 === null &&
+          nota3 === null
+        ) {
+          continue;
+        }
+
+
+        const notas = [];
+
+
+        if (nota1 !== null) {
+          notas.push(nota1);
+        }
+
+        if (nota2 !== null) {
+          notas.push(nota2);
+        }
+
+        if (nota3 !== null) {
+          notas.push(nota3);
+        }
+
+
+        const media =
+          notas.length
+            ? notas.reduce(
+                (total, nota) => total + nota,
+                0
+              ) / notas.length
+            : 0;
+
+
+        const situacao =
+          media >= 5
+            ? "Aprovado"
+            : "Reprovado";
+
+
+        if (situacao === "Aprovado") {
+          aprovados++;
+        } else {
+          reprovados++;
+        }
+
+
+        somaMedias += media;
+
+
+        alunosProcessados.push({
+
+          numero,
+          nome,
+          nota1,
+          nota2,
+          nota3,
+          media,
+          situacao
+
+        });
+
+
+        const linhaTabela =
+          document.createElement("tr");
+
+
+        linhaTabela.innerHTML = `
+
+          <td>${numero}</td>
+
+          <td>${nome}</td>
+
+          <td>${formatarNota(nota1)}</td>
+
+          <td>${formatarNota(nota2)}</td>
+
+          <td>${formatarNota(nota3)}</td>
+
+          <td>
+            ${media.toFixed(2).replace(".", ",")}
+          </td>
+
+          <td>${situacao}</td>
+
+        `;
+
+
+        tabela.appendChild(linhaTabela);
+
+      }
+
+
+      const total =
+        alunosProcessados.length;
+
+
+      const porcentagemAprovados =
+        total
+          ? (aprovados / total) * 100
+          : 0;
+
+
+      const porcentagemReprovados =
+        total
+          ? (reprovados / total) * 100
+          : 0;
+
+
+      const mediaGeral =
+        total
+          ? somaMedias / total
+          : 0;
+
+
+      document.getElementById("totalAlunos")
+        .textContent = total;
+
+
+      document.getElementById("totalAprovados")
+        .textContent = aprovados;
+
+
+      document.getElementById("totalReprovados")
+        .textContent = reprovados;
+
+
+      document.getElementById("porcentagemAprovados")
+        .textContent =
+        porcentagemAprovados.toFixed(1) + "%";
+
+
+      document.getElementById("porcentagemReprovados")
+        .textContent =
+        porcentagemReprovados.toFixed(1) + "%";
+
+
+      document.getElementById("mediaGeral")
+        .textContent =
+        mediaGeral.toFixed(2).replace(".", ",");
+
+
+      document.getElementById("botaoExcel")
+        .disabled = false;
+
+
+      document.getElementById("botaoGrafico")
+        .disabled = false;
+
+
+      document.getElementById("mensagem")
+        .textContent =
+        "Arquivo processado com sucesso.";
 
     }
 
 
     function converterNota(valor) {
 
-        if (
-            valor === undefined ||
-            valor === null ||
-            valor === ""
-        ) {
-
-            return null;
-
-        }
+      if (
+        valor === undefined ||
+        valor === null ||
+        valor === ""
+      ) {
+        return null;
+      }
 
 
-        const numero =
-            Number(
-                String(valor)
-                    .replace(",", ".")
-            );
+      const numero =
+        Number(
+          String(valor).replace(",", ".")
+        );
 
 
-        if (Number.isNaN(numero)) {
-
-            return null;
-
-        }
-
-
-        return numero;
+      return Number.isNaN(numero)
+        ? null
+        : numero;
 
     }
 
 
     function formatarNota(nota) {
 
-        if (nota === null) {
-
-            return "-";
-
-        }
-
-        return nota
-            .toFixed(2)
-            .replace(".", ",");
+      return nota === null
+        ? "-"
+        : nota.toFixed(2).replace(".", ",");
 
     }
 
 
-    function atualizarResumo(
-        total,
-        aprovados,
-        reprovados,
-        somaMedias
-    ) {
+    function gerarExcel() {
 
-        document.getElementById("totalAlunos").textContent =
-            total;
+      if (!alunosProcessados.length) {
+        return;
+      }
 
 
-        document.getElementById("totalAprovados").textContent =
-            aprovados;
+      const dados = [
+
+        [
+          "Nº",
+          "Aluno",
+          "Nota 1",
+          "Nota 2",
+          "Nota 3",
+          "Média",
+          "Situação"
+        ]
+
+      ];
 
 
-        document.getElementById("totalReprovados").textContent =
-            reprovados;
+      alunosProcessados.forEach(aluno => {
+
+        dados.push([
+
+          aluno.numero,
+
+          aluno.nome,
+
+          aluno.nota1,
+
+          aluno.nota2,
+
+          aluno.nota3,
+
+          Number(
+            aluno.media.toFixed(2)
+          ),
+
+          aluno.situacao
+
+        ]);
+
+      });
 
 
-        let porcentagemAprovados = 0;
-
-        let porcentagemReprovados = 0;
-
-
-        if (total > 0) {
-
-            porcentagemAprovados =
-                (aprovados / total) * 100;
+      const planilha =
+        XLSX.utils.aoa_to_sheet(dados);
 
 
-            porcentagemReprovados =
-                (reprovados / total) * 100;
-
-        }
+      const workbook =
+        XLSX.utils.book_new();
 
 
-        document.getElementById("porcentagemAprovados").textContent =
-            porcentagemAprovados.toFixed(1) + "%";
+      XLSX.utils.book_append_sheet(
+        workbook,
+        planilha,
+        "Resultado"
+      );
 
 
-        document.getElementById("porcentagemReprovados").textContent =
-            porcentagemReprovados.toFixed(1) + "%";
+      const nomeBase =
+        nomeArquivoOriginal
+          .replace(/\.[^/.]+$/, "");
 
 
-        let mediaGeral = 0;
+      const nomeNovo =
+        nomeBase + "_com_medias.xlsx";
 
 
-        if (total > 0) {
-
-            mediaGeral =
-                somaMedias / total;
-
-        }
-
-
-        document.getElementById("mediaGeral").textContent =
-            mediaGeral
-                .toFixed(2)
-                .replace(".", ",");
+      XLSX.writeFile(
+        workbook,
+        nomeNovo
+      );
 
     }
 
-</script>
 
-</body>
-</html>
+    function mostrarGrafico() {
 
-    <p>Meu primeiro sistema publicado na Vercel.</p>
+      const aprovados =
+        alunosProcessados.filter(
+          aluno =>
+            aluno.situacao === "Aprovado"
+        ).length;
 
-    <button>Clique aqui</button>
+
+      const reprovados =
+        alunosProcessados.filter(
+          aluno =>
+            aluno.situacao === "Reprovado"
+        ).length;
+
+
+      const canvas =
+        document.getElementById(
+          "graficoAlunos"
+        );
+
+
+      const contexto =
+        canvas.getContext("2d");
+
+
+      contexto.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+
+      const maior =
+        Math.max(
+          aprovados,
+          reprovados,
+          1
+        );
+
+
+      const escala =
+        250 / maior;
+
+
+      contexto.font =
+        "18px Arial";
+
+
+      contexto.fillText(
+        "Aprovados: " + aprovados,
+        100,
+        40
+      );
+
+
+      contexto.fillText(
+        "Reprovados: " + reprovados,
+        400,
+        40
+      );
+
+
+      contexto.fillRect(
+        100,
+        80,
+        150,
+        aprovados * escala
+      );
+
+
+      contexto.fillRect(
+        400,
+        80,
+        150,
+        reprovados * escala
+      );
+
+
+      contexto.fillText(
+        String(aprovados),
+        165,
+        70 + aprovados * escala
+      );
+
+
+      contexto.fillText(
+        String(reprovados),
+        465,
+        70 + reprovados * escala
+      );
+
+    }
+
+  </script>
 
 </body>
 </html>
