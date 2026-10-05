@@ -1,3 +1,24 @@
+async function chamarGeminiComRetry(url, opcoes) {
+  const esperas = [2000, 4000];
+  const maxTentativas = 3;
+
+  let resposta;
+
+  for (let tentativa = 0; tentativa < maxTentativas; tentativa++) {
+    resposta = await fetch(url, opcoes);
+
+    if (resposta.status !== 503 || tentativa === maxTentativas - 1) {
+      return resposta;
+    }
+
+    await new Promise((resolver) =>
+      setTimeout(resolver, esperas[tentativa])
+    );
+  }
+
+  return resposta;
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
@@ -72,7 +93,7 @@ Se o pedido depender de dados de uma planilha, avise de forma breve
 que ainda não há planilha importada no sistema.
 `;
 
-    const resposta = await fetch(
+    const resposta = await chamarGeminiComRetry(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
       {
         method: "POST",
