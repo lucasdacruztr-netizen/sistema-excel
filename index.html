@@ -1041,9 +1041,12 @@ async function enviarParaIA() {
 
     if (!resultado.ok) {
 
+      console.error("Erro completo da API:", dados);
+
       throw new Error(
-        dados.erro ||
-        "Não foi possível obter resposta da IA."
+        dados.detalhes
+          ? `${dados.erro || "Erro da API"}\n\nDetalhes: ${JSON.stringify(dados.detalhes, null, 2)}`
+          : (dados.erro || "Não foi possível obter resposta da IA.")
       );
 
     }
