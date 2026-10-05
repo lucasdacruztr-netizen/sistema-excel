@@ -134,7 +134,7 @@ ${instrucaoPlanilha}
             }
           ],
           generationConfig: {
-            temperature: 0.4,
+            thinking_level: "low",
             maxOutputTokens: 4000
           }
         })
