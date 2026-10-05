@@ -24,10 +24,6 @@
       min-height: 100vh;
     }
 
-    /* =========================
-       CABEÇALHO
-    ========================= */
-
     header {
       background: linear-gradient(135deg, #111827, #1e3a8a);
       color: white;
@@ -67,19 +63,11 @@
       font-size: 15px;
     }
 
-    /* =========================
-       CONTAINER
-    ========================= */
-
     .container {
       max-width: 1200px;
       margin: 30px auto;
       padding: 0 20px;
     }
-
-    /* =========================
-       CARDS
-    ========================= */
 
     .card {
       background: white;
@@ -112,8 +100,109 @@
     }
 
     /* =========================
-       UPLOAD
+       ASSISTENTE IA
     ========================= */
+
+    .ia-card {
+      border: 1px solid #dbeafe;
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+    }
+
+    .ia-descricao {
+      color: #64748b;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .ia-opcoes {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .ia-opcao {
+      background: #f8fafc;
+      border: 1px solid #dbe2ea;
+      color: #172033;
+      text-align: left;
+      padding: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .ia-opcao:hover {
+      border-color: #2563eb;
+      background: #eff6ff;
+      transform: translateY(-2px);
+    }
+
+    .ia-opcao strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .ia-opcao small {
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    .ia-input-area {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #mensagemIA {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      border: 1px solid #dbe2ea;
+      border-radius: 12px;
+      padding: 15px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      color: #172033;
+      outline: none;
+    }
+
+    #mensagemIA:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.10);
+    }
+
+    #botaoIA {
+      align-self: flex-start;
+      background: #2563eb;
+      color: white;
+    }
+
+    #botaoIA:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .ia-status {
+      display: none;
+      margin-top: 15px;
+      padding: 13px 16px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 14px;
+    }
+
+    .ia-resposta {
+      display: none;
+      margin-top: 18px;
+      padding: 18px;
+      background: #f8fafc;
+      border: 1px solid #e5eaf1;
+      border-radius: 12px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
 
     .upload-area {
       border: 2px dashed #bfdbfe;
@@ -161,10 +250,6 @@
       color: #475569;
       font-size: 14px;
     }
-
-    /* =========================
-       INDICADORES
-    ========================= */
 
     .resumo {
       display: grid;
@@ -216,10 +301,6 @@
       color: #2563eb;
     }
 
-    /* =========================
-       BOTÕES
-    ========================= */
-
     .acoes {
       display: flex;
       flex-wrap: wrap;
@@ -256,10 +337,6 @@
       background: #111827;
       color: white;
     }
-
-    /* =========================
-       TABELA
-    ========================= */
 
     .tabela-container {
       overflow-x: auto;
@@ -318,10 +395,6 @@
       font-weight: bold;
     }
 
-    /* =========================
-       GRÁFICO
-    ========================= */
-
     .grafico-card {
       display: none;
     }
@@ -368,10 +441,6 @@
       height: auto;
     }
 
-    /* =========================
-       RODAPÉ
-    ========================= */
-
     footer {
       text-align: center;
       color: #94a3b8;
@@ -379,9 +448,13 @@
       padding: 20px;
     }
 
-    /* =========================
-       RESPONSIVO
-    ========================= */
+    @media (max-width: 900px) {
+
+      .ia-opcoes {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+    }
 
     @media (max-width: 800px) {
 
@@ -405,14 +478,20 @@
         width: 100%;
       }
 
+      .ia-opcoes {
+        grid-template-columns: 1fr;
+      }
+
+      #botaoIA {
+        width: 100%;
+      }
+
     }
 
   </style>
 </head>
 
-
 <body>
-
 
 <header>
 
@@ -441,8 +520,110 @@
 </header>
 
 
-
 <div class="container">
+
+
+  <!-- ASSISTENTE DE PLANILHAS -->
+
+  <div class="card ia-card">
+
+    <div class="card-title">
+
+      <span>🤖</span>
+
+      <h2>Assistente de Planilhas</h2>
+
+    </div>
+
+    <p class="ia-descricao">
+      Use a inteligência artificial para ajudar a criar,
+      organizar e analisar suas planilhas.
+    </p>
+
+
+    <div class="ia-opcoes">
+
+      <button
+        type="button"
+        class="ia-opcao"
+        onclick="selecionarOpcaoIA('Criar planilha')"
+      >
+        <strong>📄 Criar planilha</strong>
+        <small>
+          Descreva a planilha que você precisa.
+        </small>
+      </button>
+
+
+      <button
+        type="button"
+        class="ia-opcao"
+        onclick="selecionarOpcaoIA('Analisar planilha')"
+      >
+        <strong>📊 Analisar planilha</strong>
+        <small>
+          Peça uma análise dos seus dados.
+        </small>
+      </button>
+
+
+      <button
+        type="button"
+        class="ia-opcao"
+        onclick="selecionarOpcaoIA('Encontrar erros')"
+      >
+        <strong>🔎 Encontrar erros</strong>
+        <small>
+          Peça ajuda para identificar problemas.
+        </small>
+      </button>
+
+
+      <button
+        type="button"
+        class="ia-opcao"
+        onclick="selecionarOpcaoIA('Organizar dados')"
+      >
+        <strong>🗂️ Organizar dados</strong>
+        <small>
+          Receba sugestões para organizar informações.
+        </small>
+      </button>
+
+    </div>
+
+
+    <div class="ia-input-area">
+
+      <textarea
+        id="mensagemIA"
+        placeholder="Exemplo: Crie uma planilha para controlar alunos com nome, turma, idade, nota 1, nota 2 e média."
+      ></textarea>
+
+
+      <button
+        id="botaoIA"
+        type="button"
+        onclick="enviarParaIA()"
+      >
+        🤖 Perguntar ao Gemini
+      </button>
+
+    </div>
+
+
+    <div
+      id="statusIA"
+      class="ia-status"
+    ></div>
+
+
+    <div
+      id="respostaIA"
+      class="ia-resposta"
+    ></div>
+
+  </div>
 
 
   <!-- IMPORTAÇÃO -->
@@ -489,7 +670,6 @@
     </div>
 
   </div>
-
 
 
   <!-- RESUMO -->
@@ -544,7 +724,6 @@
     </div>
 
 
-
     <div class="resumo">
 
 
@@ -584,7 +763,6 @@
     </div>
 
 
-
     <div class="acoes">
 
       <button
@@ -607,7 +785,6 @@
     </div>
 
   </div>
-
 
 
   <!-- TABELA -->
@@ -669,7 +846,6 @@
   </div>
 
 
-
   <!-- GRÁFICO -->
 
   <div
@@ -724,7 +900,6 @@
 </div>
 
 
-
 <footer>
 
   Sistema de Organização de Alunos
@@ -732,25 +907,157 @@
 </footer>
 
 
-
 <script>
-
 
 let alunosProcessados = [];
 
 let nomeArquivoOriginal = "";
 
 
+/* =========================
+   ASSISTENTE GEMINI
+========================= */
+
+function selecionarOpcaoIA(opcao) {
+
+  const campo = document.getElementById("mensagemIA");
+
+  const exemplos = {
+
+    "Criar planilha":
+      "Crie uma planilha para ",
+
+    "Analisar planilha":
+      "Quero analisar uma planilha com ",
+
+    "Encontrar erros":
+      "Quero encontrar erros em uma planilha que possui ",
+
+    "Organizar dados":
+      "Quero organizar uma planilha que possui "
+
+  };
+
+  campo.value = exemplos[opcao] || "";
+
+  campo.focus();
+
+}
+
+
+async function enviarParaIA() {
+
+  const campo = document.getElementById("mensagemIA");
+
+  const botao = document.getElementById("botaoIA");
+
+  const status = document.getElementById("statusIA");
+
+  const resposta = document.getElementById("respostaIA");
+
+  const mensagem = campo.value.trim();
+
+
+  if (!mensagem) {
+
+    status.style.display = "block";
+
+    status.textContent =
+      "⚠️ Escreva o que você deseja fazer com a planilha.";
+
+    resposta.style.display = "none";
+
+    return;
+
+  }
+
+
+  botao.disabled = true;
+
+  botao.textContent = "⏳ Consultando Gemini...";
+
+  status.style.display = "block";
+
+  status.textContent =
+    "🤖 O Gemini está analisando sua solicitação...";
+
+  resposta.style.display = "none";
+
+
+  try {
+
+    const resultado = await fetch("/api/ia", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        mensagem: mensagem
+      })
+
+    });
+
+
+    const dados = await resultado.json();
+
+
+    if (!resultado.ok) {
+
+      throw new Error(
+        dados.erro ||
+        "Não foi possível obter resposta da IA."
+      );
+
+    }
+
+
+    resposta.textContent =
+      dados.resposta || "O Gemini não retornou uma resposta.";
+
+    resposta.style.display = "block";
+
+    status.textContent =
+      "✅ Resposta recebida do Gemini.";
+
+  } catch (erro) {
+
+    console.error(erro);
+
+    status.textContent =
+      "❌ Não foi possível conversar com o Gemini.";
+
+    resposta.style.display = "block";
+
+    resposta.textContent =
+      erro.message ||
+      "Verifique a configuração da Vercel.";
+
+  } finally {
+
+    botao.disabled = false;
+
+    botao.textContent =
+      "🤖 Perguntar ao Gemini";
+
+  }
+
+}
+
+
+/* =========================
+   IMPORTAÇÃO DO EXCEL
+========================= */
 
 const arquivoExcel =
   document.getElementById("arquivoExcel");
 
 
-
 arquivoExcel.addEventListener(
   "change",
   function(event) {
-
 
     const arquivo =
       event.target.files[0];
@@ -772,18 +1079,14 @@ arquivoExcel.addEventListener(
       arquivo.name;
 
 
-
     const leitor =
       new FileReader();
-
 
 
     leitor.onload =
       function(e) {
 
-
         try {
-
 
           const dados =
             new Uint8Array(
@@ -826,12 +1129,10 @@ arquivoExcel.addEventListener(
 
         } catch (erro) {
 
-
           document.getElementById(
             "mensagem"
           ).textContent =
             "❌ Erro ao ler o arquivo Excel.";
-
 
           console.error(erro);
 
@@ -848,24 +1149,23 @@ arquivoExcel.addEventListener(
 );
 
 
-
+/* =========================
+   PROCESSAMENTO DOS ALUNOS
+========================= */
 
 function processarAlunos(dados) {
 
 
   if (dados.length < 2) {
 
-
     document.getElementById(
       "mensagem"
     ).textContent =
       "A planilha não possui dados suficientes.";
 
-
     return;
 
   }
-
 
 
   const tabela =
@@ -876,7 +1176,6 @@ function processarAlunos(dados) {
 
   tabela.innerHTML = "";
 
-
   alunosProcessados = [];
 
 
@@ -885,7 +1184,6 @@ function processarAlunos(dados) {
   let reprovados = 0;
 
   let somaMedias = 0;
-
 
 
   for (
@@ -907,14 +1205,12 @@ function processarAlunos(dados) {
     }
 
 
-
     const numero =
       linha[0] ?? "";
 
 
     const nome =
       linha[1] ?? "";
-
 
 
     const nota1 =
@@ -935,7 +1231,6 @@ function processarAlunos(dados) {
       );
 
 
-
     if (
       nome === "" &&
       nota1 === null &&
@@ -946,9 +1241,7 @@ function processarAlunos(dados) {
     }
 
 
-
     const notas = [];
-
 
 
     if (
@@ -972,15 +1265,12 @@ function processarAlunos(dados) {
     }
 
 
-
     let media = 0;
-
 
 
     if (
       notas.length > 0
     ) {
-
 
       media =
         notas.reduce(
@@ -999,12 +1289,10 @@ function processarAlunos(dados) {
     }
 
 
-
     const situacao =
       media >= 5
         ? "Aprovado"
         : "Reprovado";
-
 
 
     if (
@@ -1020,9 +1308,7 @@ function processarAlunos(dados) {
     }
 
 
-
     somaMedias += media;
-
 
 
     alunosProcessados.push({
@@ -1051,19 +1337,16 @@ function processarAlunos(dados) {
     });
 
 
-
     const linhaTabela =
       document.createElement(
         "tr"
       );
 
 
-
     const classeStatus =
       situacao === "Aprovado"
         ? "aprovado"
         : "reprovado";
-
 
 
     linhaTabela.innerHTML = `
@@ -1115,7 +1398,6 @@ function processarAlunos(dados) {
     `;
 
 
-
     tabela.appendChild(
       linhaTabela
     );
@@ -1123,10 +1405,8 @@ function processarAlunos(dados) {
   }
 
 
-
   const total =
     alunosProcessados.length;
-
 
 
   const porcentagemAprovados =
@@ -1135,12 +1415,10 @@ function processarAlunos(dados) {
       : 0;
 
 
-
   const porcentagemReprovados =
     total > 0
       ? (reprovados / total) * 100
       : 0;
-
 
 
   const mediaGeral =
@@ -1149,12 +1427,10 @@ function processarAlunos(dados) {
       : 0;
 
 
-
   document.getElementById(
     "totalAlunos"
   ).textContent =
     total;
-
 
 
   document.getElementById(
@@ -1163,12 +1439,10 @@ function processarAlunos(dados) {
     aprovados;
 
 
-
   document.getElementById(
     "totalReprovados"
   ).textContent =
     reprovados;
-
 
 
   document.getElementById(
@@ -1179,14 +1453,12 @@ function processarAlunos(dados) {
     "%";
 
 
-
   document.getElementById(
     "porcentagemReprovados"
   ).textContent =
     porcentagemReprovados
       .toFixed(1) +
     "%";
-
 
 
   document.getElementById(
@@ -1197,17 +1469,14 @@ function processarAlunos(dados) {
       .replace(".", ",");
 
 
-
   document.getElementById(
     "botaoExcel"
   ).disabled = false;
 
 
-
   document.getElementById(
     "botaoGrafico"
   ).disabled = false;
-
 
 
   document.getElementById(
@@ -1220,7 +1489,9 @@ function processarAlunos(dados) {
 }
 
 
-
+/* =========================
+   CONVERTER NOTA
+========================= */
 
 function converterNota(valor) {
 
@@ -1236,13 +1507,11 @@ function converterNota(valor) {
   }
 
 
-
   const numero =
     Number(
       String(valor)
         .replace(",", ".")
     );
-
 
 
   if (
@@ -1254,13 +1523,14 @@ function converterNota(valor) {
   }
 
 
-
   return numero;
 
 }
 
 
-
+/* =========================
+   FORMATAR NOTA
+========================= */
 
 function formatarNota(nota) {
 
@@ -1281,7 +1551,9 @@ function formatarNota(nota) {
 }
 
 
-
+/* =========================
+   GERAR EXCEL
+========================= */
 
 function gerarExcel() {
 
@@ -1293,7 +1565,6 @@ function gerarExcel() {
     return;
 
   }
-
 
 
   const dados = [
@@ -1309,7 +1580,6 @@ function gerarExcel() {
     ]
 
   ];
-
 
 
   alunosProcessados.forEach(
@@ -1340,17 +1610,14 @@ function gerarExcel() {
   );
 
 
-
   const planilha =
     XLSX.utils.aoa_to_sheet(
       dados
     );
 
 
-
   const workbook =
     XLSX.utils.book_new();
-
 
 
   XLSX.utils.book_append_sheet(
@@ -1358,7 +1625,6 @@ function gerarExcel() {
     planilha,
     "Resultado"
   );
-
 
 
   const nomeBase =
@@ -1369,11 +1635,9 @@ function gerarExcel() {
       );
 
 
-
   const nomeNovo =
     nomeBase +
     "_com_medias.xlsx";
-
 
 
   XLSX.writeFile(
@@ -1384,7 +1648,9 @@ function gerarExcel() {
 }
 
 
-
+/* =========================
+   GRÁFICO
+========================= */
 
 function mostrarGrafico() {
 
@@ -1396,7 +1662,6 @@ function mostrarGrafico() {
     return;
 
   }
-
 
 
   const aprovados =
@@ -1412,7 +1677,6 @@ function mostrarGrafico() {
     ).length;
 
 
-
   const reprovados =
     alunosProcessados.filter(
       function(aluno) {
@@ -1426,17 +1690,14 @@ function mostrarGrafico() {
     ).length;
 
 
-
   const cardGrafico =
     document.getElementById(
       "cardGrafico"
     );
 
 
-
   cardGrafico.style.display =
     "block";
-
 
 
   const canvas =
@@ -1445,10 +1706,8 @@ function mostrarGrafico() {
     );
 
 
-
   const contexto =
     canvas.getContext("2d");
-
 
 
   contexto.clearRect(
@@ -1459,20 +1718,16 @@ function mostrarGrafico() {
   );
 
 
-
   const largura =
     canvas.width;
-
 
 
   const altura =
     canvas.height;
 
 
-
   const baseY =
     360;
-
 
 
   const maior =
@@ -1483,10 +1738,8 @@ function mostrarGrafico() {
     );
 
 
-
   const alturaMaxima =
     260;
-
 
 
   const escala =
@@ -1494,27 +1747,20 @@ function mostrarGrafico() {
     maior;
 
 
-
   const larguraBarra =
     190;
-
 
 
   const xAprovados =
     180;
 
 
-
   const xReprovados =
     480;
 
 
-
-  /* FUNDO */
-
   contexto.fillStyle =
     "#f8fafc";
-
 
 
   contexto.fillRect(
@@ -1525,17 +1771,12 @@ function mostrarGrafico() {
   );
 
 
-
-  /* LINHAS */
-
   contexto.strokeStyle =
     "#e2e8f0";
 
 
-
   contexto.lineWidth =
     1;
-
 
 
   for (
@@ -1551,40 +1792,36 @@ function mostrarGrafico() {
       i;
 
 
-
     contexto.beginPath();
+
 
     contexto.moveTo(
       80,
       y
     );
 
+
     contexto.lineTo(
       770,
       y
     );
+
 
     contexto.stroke();
 
   }
 
 
-
-  /* TÍTULO */
-
   contexto.fillStyle =
     "#172033";
-
 
 
   contexto.font =
     "bold 20px Arial";
 
 
-
   contexto.textAlign =
     "center";
-
 
 
   contexto.fillText(
@@ -1594,17 +1831,12 @@ function mostrarGrafico() {
   );
 
 
-
-  /* BARRA APROVADOS */
-
   const alturaAprovados =
     aprovados * escala;
 
 
-
   contexto.fillStyle =
     "#16a34a";
-
 
 
   contexto.fillRect(
@@ -1616,17 +1848,12 @@ function mostrarGrafico() {
   );
 
 
-
-  /* BARRA REPROVADOS */
-
   const alturaReprovados =
     reprovados * escala;
 
 
-
   contexto.fillStyle =
     "#dc2626";
-
 
 
   contexto.fillRect(
@@ -1638,17 +1865,12 @@ function mostrarGrafico() {
   );
 
 
-
-  /* NÚMEROS */
-
   contexto.fillStyle =
     "#172033";
 
 
-
   contexto.font =
     "bold 22px Arial";
-
 
 
   contexto.fillText(
@@ -1661,7 +1883,6 @@ function mostrarGrafico() {
   );
 
 
-
   contexto.fillText(
     reprovados,
     xReprovados +
@@ -1672,12 +1893,8 @@ function mostrarGrafico() {
   );
 
 
-
-  /* NOMES */
-
   contexto.font =
     "bold 16px Arial";
-
 
 
   contexto.fillText(
@@ -1688,7 +1905,6 @@ function mostrarGrafico() {
   );
 
 
-
   contexto.fillText(
     "Reprovados",
     xReprovados +
@@ -1697,13 +1913,9 @@ function mostrarGrafico() {
   );
 
 
-
-  /* PERCENTUAIS */
-
   const total =
     aprovados +
     reprovados;
-
 
 
   const percentualAprovados =
@@ -1716,7 +1928,6 @@ function mostrarGrafico() {
       : 0;
 
 
-
   const percentualReprovados =
     total > 0
       ? (
@@ -1727,15 +1938,12 @@ function mostrarGrafico() {
       : 0;
 
 
-
   contexto.font =
     "14px Arial";
 
 
-
   contexto.fillStyle =
     "#64748b";
-
 
 
   contexto.fillText(
@@ -1748,7 +1956,6 @@ function mostrarGrafico() {
   );
 
 
-
   contexto.fillText(
     percentualReprovados
       .toFixed(1) +
@@ -1759,15 +1966,11 @@ function mostrarGrafico() {
   );
 
 
-
-  /* ROLAGEM ATÉ O GRÁFICO */
-
   cardGrafico.scrollIntoView({
     behavior: "smooth"
   });
 
 }
-
 
 </script>
 
