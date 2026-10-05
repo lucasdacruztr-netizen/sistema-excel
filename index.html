@@ -922,23 +922,57 @@ function selecionarOpcaoIA(opcao) {
 
   const campo = document.getElementById("mensagemIA");
 
+  const status = document.getElementById("statusIA");
+
+  const resposta = document.getElementById("respostaIA");
+
   const exemplos = {
 
     "Criar planilha":
-      "Crie uma planilha para ",
-
-    "Analisar planilha":
-      "Quero analisar uma planilha com ",
-
-    "Encontrar erros":
-      "Quero encontrar erros em uma planilha que possui ",
-
-    "Organizar dados":
-      "Quero organizar uma planilha que possui "
+      "Crie uma planilha para "
 
   };
 
-  campo.value = exemplos[opcao] || "";
+  const pedidosPlanilhaImportada = {
+
+    "Analisar planilha":
+      "Analise a planilha importada e apresente um resumo dos dados, incluindo total de alunos, médias, aprovados, reprovados e possíveis problemas encontrados.",
+
+    "Encontrar erros":
+      "Analise a planilha importada e identifique problemas como dados faltantes, possíveis duplicidades, notas suspeitas ou inconsistentes e nomes com problemas.",
+
+    "Organizar dados":
+      "Organize e analise a planilha importada. Identifique dados faltantes, duplicidades, notas suspeitas ou inconsistentes e problemas nos nomes. Não crie uma nova planilha ainda."
+
+  };
+
+
+  if (pedidosPlanilhaImportada[opcao]) {
+
+    if (alunosProcessados.length > 0) {
+
+      campo.value = pedidosPlanilhaImportada[opcao];
+
+      status.style.display = "none";
+
+    } else {
+
+      campo.value = "";
+
+      status.style.display = "block";
+
+      status.textContent =
+        "⚠️ Primeiro é necessário importar uma planilha Excel para usar esta opção.";
+
+      resposta.style.display = "none";
+
+    }
+
+  } else {
+
+    campo.value = exemplos[opcao] || "";
+
+  }
 
   campo.focus();
 
